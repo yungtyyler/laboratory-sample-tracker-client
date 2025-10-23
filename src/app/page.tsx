@@ -21,9 +21,17 @@ export default function Home() {
                 </span>
                 !
               </h2>
+
+              <Link
+                href="/dashboard"
+                className="mr-4 mb-4 inline-block rounded-md bg-green-600 px-4 py-2 text-white transition hover:bg-green-700"
+              >
+                Go to Sample Dashboard
+              </Link>
+
               <button
                 onClick={logout}
-                className="rounded-md bg-red-600 px-4 py-2 text-white transition hover:bg-red-700"
+                className="cursor-pointer rounded-md bg-red-600 px-4 py-2 text-white transition hover:bg-red-700"
               >
                 Logout
               </button>
