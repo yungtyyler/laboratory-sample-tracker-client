@@ -2,8 +2,9 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
+import { StatusPieChart } from "@/components/charts/StatusPieChart";
 
 export interface Sample {
   id: number;
@@ -57,6 +58,22 @@ const Dashboard = () => {
       });
   }, [token, router]);
 
+  // We use 'useMemo' so this only recalculates when 'samples' changes
+  const statusChartData = useMemo(() => {
+    const counts = samples.reduce(
+      (acc, sample) => {
+        acc[sample.status] = (acc[sample.status] || 0) + 1;
+        return acc;
+      },
+      {} as { [key: string]: number }
+    );
+
+    return Object.entries(counts).map(([name, value]) => ({
+      name,
+      value,
+    }));
+  }, [samples]);
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -89,6 +106,28 @@ const Dashboard = () => {
         >
           + Register New Sample
         </Link>
+      </div>
+
+      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="rounded-lg bg-white p-6 shadow md:col-span-2">
+          <h2 className="mb-4 text-xl font-semibold text-gray-800">
+            Sample Throughput (Coming Soon)
+          </h2>
+          {/* Add the bar chart here later */}
+          <div className="flex h-full items-center justify-center text-gray-400">
+            Bar chart will go here.
+          </div>
+        </div>
+        <div className="rounded-lg bg-white p-6 shadow">
+          <h2 className="mb-4 text-xl font-semibold text-gray-800">
+            Status Breakdown
+          </h2>
+          {statusChartData.length > 0 ? (
+            <StatusPieChart data={statusChartData} />
+          ) : (
+            <p className="text-gray-500">No sample data to display.</p>
+          )}
+        </div>
       </div>
 
       {error && (
