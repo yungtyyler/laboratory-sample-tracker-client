@@ -148,10 +148,12 @@ const Dashboard = () => {
                     {new Date(sample.updated_at).toLocaleString()}
                   </td>
                   <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
-                    {/* TODO: Add Edit Link */}
-                    <a href="#" className="text-blue-600 hover:text-blue-900">
+                    <Link
+                      href={`/dashboard/${sample.id}`}
+                      className="text-blue-600 hover:text-blue-900"
+                    >
                       View/Edit
-                    </a>
+                    </Link>
                   </td>
                 </tr>
               ))
