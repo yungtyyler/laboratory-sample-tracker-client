@@ -44,6 +44,7 @@ const NewSample = () => {
           const data = await response.json();
           errorMsg =
             data.sample_id?.[0] || data.name?.[0] || "Failed to create sample.";
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (jsonError) {
           // If JSON parsing fails, it's HTML. Get the response as text.
           const errorText = await response.text();
@@ -91,7 +92,7 @@ const NewSample = () => {
             value={sampleId}
             onChange={(e) => setSampleId(e.target.value)}
             required
-            className="w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="focus:border-primary focus:ring-primary w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm"
           />
         </div>
 
@@ -108,7 +109,7 @@ const NewSample = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="focus:border-primary focus:ring-primary w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm"
           />
         </div>
 
@@ -116,7 +117,7 @@ const NewSample = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className="cursor-pointer rounded-md bg-blue-600 px-6 py-3 text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+            className="bg-primary hover:bg-primary-dark rounded-md px-6 py-3 text-white transition disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isLoading ? "Registering..." : "Register Sample"}
           </button>

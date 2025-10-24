@@ -21,13 +21,15 @@ export default function Home() {
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans">
       <main className="flex min-h-screen flex-col items-center p-24">
         <div className="w-full max-w-5xl">
-          <h1 className="mb-6 text-4xl font-bold">LIMS Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            LIMS <span className="font-light">Sample Tracker</span>
+          </h1>
 
           {token && user ? (
             <div className="rounded-lg bg-white p-6 shadow">
               <h2 className="mb-4 text-2xl">
                 Welcome back,{" "}
-                <span className="font-semibold text-blue-600">
+                <span className="text-primary font-semibold">
                   {user.username}
                 </span>
                 !
@@ -35,7 +37,7 @@ export default function Home() {
 
               <Link
                 href="/dashboard"
-                className="mr-4 mb-4 inline-block rounded-md bg-green-600 px-4 py-2 text-white transition hover:bg-green-700"
+                className="bg-primary hover:bg-primary-dark mr-4 mb-4 inline-block rounded-md px-4 py-2 text-white transition"
               >
                 Go to Sample Dashboard
               </Link>
@@ -56,7 +58,7 @@ export default function Home() {
               </p>
               <Link
                 href="/login"
-                className="rounded-md bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
+                className="bg-primary hover:bg-primary-dark rounded-md px-4 py-2 text-white transition"
               >
                 Go to Login
               </Link>

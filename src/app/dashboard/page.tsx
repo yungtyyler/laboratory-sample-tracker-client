@@ -121,7 +121,9 @@ const Dashboard = () => {
     <div className="min-h-screen bg-gray-100 p-8">
       <header className="mb-8 flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Sample Dashboard</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            LIMS <span className="font-light">Sample Tracker</span>
+          </h1>
           <p className="text-lg text-gray-600">
             Welcome, {user?.username || "Scientist"}!
           </p>
@@ -137,14 +139,14 @@ const Dashboard = () => {
       <div className="mb-6 flex justify-end">
         <Link
           href="/dashboard/new"
-          className="rounded-md bg-green-600 px-5 py-2.5 text-white shadow-sm transition hover:bg-green-700"
+          className="bg-primary hover:bg-primary-dark rounded-md px-5 py-2.5 text-white shadow-sm transition"
         >
           + Register New Sample
         </Link>
       </div>
 
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-        <div className="rounded-lg bg-white p-6 shadow md:col-span-2">
+        <div className="overflow-x-auto rounded-lg bg-white p-6 shadow md:col-span-2">
           <h2 className="mb-4 text-xl font-semibold text-gray-800">
             Sample Throughput (Last 7 Days)
           </h2>
@@ -154,7 +156,7 @@ const Dashboard = () => {
             <p className="text-gray-500">No sample data to display.</p>
           )}
         </div>
-        <div className="rounded-lg bg-white p-6 shadow">
+        <div className="overflow-x-auto rounded-lg bg-white p-6 shadow">
           <h2 className="mb-4 text-xl font-semibold text-gray-800">
             Status Breakdown
           </h2>
@@ -225,7 +227,7 @@ const Dashboard = () => {
                   <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                     <Link
                       href={`/dashboard/${sample.id}`}
-                      className="text-blue-600 hover:text-blue-900"
+                      className="text-primary hover:text-primary-dark"
                     >
                       View/Edit
                     </Link>

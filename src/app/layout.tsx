@@ -6,8 +6,25 @@ import { AuthProvider } from "@/context/AuthContext";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "LIMS Sample Tracker",
-  description: "LIMS built with Next.js and Django",
+  title: "LIMS - Laboratory Sample Tracker",
+  description:
+    "A full-stack LIMS-lite application for managing lab samples, built with Next.js and Django.",
+  openGraph: {
+    title: "LIMS - Laboratory Sample Tracker",
+    description: "A full-stack LIMS-lite application for managing lab samples.",
+    images: [
+      {
+        url: "/apple-touch-icon.png",
+        width: 180,
+        height: 180,
+        alt: "LIMS Logo",
+      },
+    ],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
+  },
 };
 
 export default function RootLayout({
@@ -17,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${inter.className} h-full w-full`}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

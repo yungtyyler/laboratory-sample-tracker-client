@@ -90,7 +90,7 @@ export default function SampleDetailPage() {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
       <nav className="mb-6">
-        <Link href="/dashboard" className="text-blue-600 hover:underline">
+        <Link href="/dashboard" className="text-primary hover:underline">
           &larr; Back to Dashboard
         </Link>
       </nav>
@@ -131,7 +131,7 @@ export default function SampleDetailPage() {
                   id="status"
                   value={currentStatus}
                   onChange={(e) => setCurrentStatus(e.target.value)}
-                  className="w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                  className="focus:border-primary focus:ring-primary w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm"
                 >
                   {STATUS_CHOICES.map((status) => (
                     <option key={status} value={status}>
@@ -143,7 +143,7 @@ export default function SampleDetailPage() {
               <button
                 type="submit"
                 disabled={isUpdating}
-                className="rounded-md bg-blue-600 px-5 py-3 text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
+                className="bg-primary hover:bg-primary-dark rounded-md px-5 py-3 text-white shadow-sm transition disabled:opacity-50"
               >
                 {isUpdating ? "Saving..." : "Save Status"}
               </button>

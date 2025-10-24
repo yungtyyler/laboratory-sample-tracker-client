@@ -20,7 +20,7 @@ interface BarChartData {
 
 export function ThroughputBarChart({ data }: { data: BarChartData[] }) {
   return (
-    <div style={{ width: "100%", height: 300 }}>
+    <div style={{ width: "100%", minWidth: 450, height: 300 }}>
       <ResponsiveContainer>
         <BarChart
           data={data}
@@ -36,7 +36,7 @@ export function ThroughputBarChart({ data }: { data: BarChartData[] }) {
           <YAxis allowDecimals={false} />
           <Tooltip />
           <Legend />
-          <Bar dataKey="Completed" fill="#00C49F" />
+          <Bar dataKey="Completed" fill="var(--color-primary)" />
         </BarChart>
       </ResponsiveContainer>
     </div>

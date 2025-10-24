@@ -104,14 +104,14 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            className="focus:border-primary focus:ring-primary w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm"
           />
         </div>
 
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full cursor-pointer rounded-md bg-blue-600 p-3 text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-primary hover:bg-primary-dark w-full rounded-md p-3 text-white transition disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isLoading ? "Logging in..." : "Login"}
         </button>
@@ -120,7 +120,7 @@ export default function LoginPage() {
           No account?{" "}
           <Link
             href="/register"
-            className="font-medium text-blue-600 hover:underline"
+            className="text-primary font-medium hover:underline"
           >
             Register here
           </Link>
