@@ -34,13 +34,17 @@ async function fetchSamples(token: string): Promise<Sample[]> {
 }
 
 const Dashboard = () => {
-  const { token, user, logout } = useAuth();
+  const { token, user, logout, loading: authLoading } = useAuth();
   const router = useRouter();
   const [samples, setSamples] = useState<Sample[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [dataLoading, setDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (authLoading) {
+      return;
+    }
+
     if (!token) {
       router.push("/login");
       return;
@@ -54,9 +58,9 @@ const Dashboard = () => {
         setError(err.message);
       })
       .finally(() => {
-        setLoading(false);
+        setDataLoading(false);
       });
-  }, [token, router]);
+  }, [token, router, authLoading]);
 
   // We use 'useMemo' so this only recalculates when 'samples' changes
   const statusChartData = useMemo(() => {
@@ -74,10 +78,10 @@ const Dashboard = () => {
     }));
   }, [samples]);
 
-  if (loading) {
+  if (authLoading || dataLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <p className="text-xl">Loading samples...</p>
+        <p className="text-xl">Loading dashboard...</p>
       </div>
     );
   }

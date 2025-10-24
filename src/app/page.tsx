@@ -4,7 +4,18 @@ import { useAuth } from "@/context/AuthContext";
 import Link from "next/link";
 
 export default function Home() {
-  const { user, token, logout } = useAuth();
+  const { user, token, logout, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <main className="flex min-h-screen flex-col items-center p-24">
+        <h1 className="mb-6 text-4xl font-bold">LIMS Dashboard</h1>
+        <div className="rounded-lg bg-white p-6 shadow">
+          <p>Loading user...</p>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans">
