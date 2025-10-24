@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { StatusPieChart } from "@/components/charts/StatusPieChart";
+import { ThroughputBarChart } from "@/components/charts/ThroughputBarChart";
 
 export interface Sample {
   id: number;
@@ -78,6 +79,36 @@ const Dashboard = () => {
     }));
   }, [samples]);
 
+  // We use 'useMemo' so this only recalculates when 'samples' changes
+  const throughputChartData = useMemo(() => {
+    const last7Days = new Map<string, number>();
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      const key = `${d.getMonth() + 1}/${d.getDate()}`;
+      last7Days.set(key, 0);
+    }
+
+    samples.forEach((sample) => {
+      if (sample.status === "Complete") {
+        const completedDate = new Date(sample.updated_at);
+        const key = `${
+          completedDate.getMonth() + 1
+        }/${completedDate.getDate()}`;
+
+        if (last7Days.has(key)) {
+          last7Days.set(key, (last7Days.get(key) || 0) + 1);
+        }
+      }
+    });
+
+    return Array.from(last7Days, ([name, count]) => ({
+      name,
+      Completed: count,
+    }));
+  }, [samples]);
+
   if (authLoading || dataLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -115,12 +146,13 @@ const Dashboard = () => {
       <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
         <div className="rounded-lg bg-white p-6 shadow md:col-span-2">
           <h2 className="mb-4 text-xl font-semibold text-gray-800">
-            Sample Throughput (Coming Soon)
+            Sample Throughput (Last 7 Days)
           </h2>
-          {/* Add the bar chart here later */}
-          <div className="flex h-full items-center justify-center text-gray-400">
-            Bar chart will go here.
-          </div>
+          {samples.length > 0 ? (
+            <ThroughputBarChart data={throughputChartData} />
+          ) : (
+            <p className="text-gray-500">No sample data to display.</p>
+          )}
         </div>
         <div className="rounded-lg bg-white p-6 shadow">
           <h2 className="mb-4 text-xl font-semibold text-gray-800">
