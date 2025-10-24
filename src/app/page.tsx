@@ -8,7 +8,7 @@ export default function Home() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen flex-col items-center p-24">
+      <main className="flex min-h-screen flex-col items-center p-6 md:p-24">
         <h1 className="mb-6 text-4xl font-bold">LIMS Dashboard</h1>
         <div className="rounded-lg bg-white p-6 shadow">
           <p>Loading user...</p>
@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans">
-      <main className="flex min-h-screen flex-col items-center gap-6 p-24">
+      <main className="mx-4 flex min-h-screen flex-col items-center gap-6 p-6">
         <div className="flex w-full max-w-5xl flex-col gap-4">
           <h1 className="text-3xl font-bold text-gray-900">
             LIMS <span className="font-light">Sample Tracker</span>

@@ -125,8 +125,8 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <header className="mb-8 flex items-center justify-between">
+    <div className="min-h-screen bg-gray-100 p-6 md:p-8">
+      <header className="mb-8 flex justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">
             LIMS <span className="font-light">Sample Tracker</span>
@@ -137,7 +137,7 @@ const Dashboard = () => {
         </div>
         <button
           onClick={logout}
-          className="rounded-md bg-red-600 px-4 py-2 text-white transition hover:bg-red-700"
+          className="h-fit w-fit rounded-md bg-red-600 px-4 py-2 text-sm text-white transition hover:bg-red-700 md:text-base"
         >
           Logout
         </button>

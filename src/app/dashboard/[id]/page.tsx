@@ -88,7 +88,7 @@ export default function SampleDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="min-h-screen bg-gray-100 p-6 md:p-8">
       <nav className="mb-6">
         <Link href="/dashboard" className="text-primary hover:underline">
           &larr; Back to Dashboard

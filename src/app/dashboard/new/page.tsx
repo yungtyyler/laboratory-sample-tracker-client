@@ -67,7 +67,7 @@ const NewSample = () => {
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-lg rounded-lg bg-white p-8 shadow-md"
+        className="w-full max-w-lg rounded-lg bg-white p-6 shadow-md md:p-8"
       >
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
           Register New Sample

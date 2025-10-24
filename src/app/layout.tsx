@@ -34,7 +34,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} h-full w-full`}>
+      <body
+        className={`${inter.className} mx-auto h-full w-full max-w-6xl bg-gray-100`}
+      >
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
