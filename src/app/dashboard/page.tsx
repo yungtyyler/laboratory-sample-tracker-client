@@ -41,6 +41,13 @@ const Dashboard = () => {
   const [dataLoading, setDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const statusColors: { [key: string]: string } = {
+    Received: "bg-blue-100 text-blue-800",
+    Processing: "bg-yellow-100 text-yellow-800",
+    Analyzed: "bg-purple-100 text-purple-800",
+    Complete: "bg-green-100 text-green-800",
+  };
+
   useEffect(() => {
     if (authLoading) {
       return;
@@ -217,9 +224,12 @@ const Dashboard = () => {
                   <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                     {sample.name}
                   </td>
-                  <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                    {/* TODO: Add status badge */}
-                    {sample.status}
+                  <td className="px-6 py-4 text-sm whitespace-nowrap">
+                    <span
+                      className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${statusColors[sample.status] || "bg-gray-100 text-gray-800"} `}
+                    >
+                      {sample.status}
+                    </span>
                   </td>
                   <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                     {new Date(sample.updated_at).toLocaleString()}
