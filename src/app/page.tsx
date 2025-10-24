@@ -19,8 +19,8 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans">
-      <main className="flex min-h-screen flex-col items-center p-24">
-        <div className="w-full max-w-5xl">
+      <main className="flex min-h-screen flex-col items-center gap-6 p-24">
+        <div className="flex w-full max-w-5xl flex-col gap-4">
           <h1 className="text-3xl font-bold text-gray-900">
             LIMS <span className="font-light">Sample Tracker</span>
           </h1>
@@ -39,7 +39,14 @@ export default function Home() {
                 href="/dashboard"
                 className="bg-primary hover:bg-primary-dark mr-4 mb-4 inline-block rounded-md px-4 py-2 text-white transition"
               >
-                Go to Sample Dashboard
+                View Dashboard
+              </Link>
+
+              <Link
+                href="/dashboard/new"
+                className="border-primary text-primary hover:bg-primary-dark mr-4 mb-4 inline-block rounded-md border px-4 py-2 transition hover:text-white"
+              >
+                + Register New Sample
               </Link>
 
               <button
@@ -48,7 +55,6 @@ export default function Home() {
               >
                 Logout
               </button>
-              {/* Add a link to the sample list here later */}
             </div>
           ) : (
             <div className="rounded-lg bg-white p-6 shadow">
