@@ -97,9 +97,9 @@ export default function SampleDetailPage() {
 
       <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
         <div className="rounded-lg bg-white p-6 shadow md:col-span-2">
-          <h1 className="mb-2 text-3xl font-bold text-gray-900">
+          <h2 className="mb-2 text-3xl font-bold text-gray-900">
             {sample.sample_id}
-          </h1>
+          </h2>
           <p className="mb-6 text-xl text-gray-700">{sample.name}</p>
 
           <div className="mb-6 grid grid-cols-2 gap-4">

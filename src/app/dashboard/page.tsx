@@ -35,7 +35,7 @@ async function fetchSamples(token: string): Promise<Sample[]> {
 }
 
 const Dashboard = () => {
-  const { token, user, logout, loading: authLoading } = useAuth();
+  const { token, user, loading: authLoading } = useAuth();
   const router = useRouter();
   const [samples, setSamples] = useState<Sample[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
@@ -126,24 +126,10 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 md:p-8">
-      <header className="mb-8 flex justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            LIMS <span className="font-light">Sample Tracker</span>
-          </h1>
-          <p className="text-lg text-gray-600">
-            Welcome, {user?.username || "Scientist"}!
-          </p>
-        </div>
-        <button
-          onClick={logout}
-          className="h-fit w-fit rounded-md bg-red-600 px-4 py-2 text-sm text-white transition hover:bg-red-700 md:text-base"
-        >
-          Logout
-        </button>
-      </header>
-
-      <div className="mb-6 flex justify-end">
+      <div className="mb-6 flex justify-between">
+        <p className="text-lg font-bold text-gray-900 md:text-2xl">
+          Welcome, {user?.username || "Scientist"}!
+        </p>
         <Link
           href="/dashboard/new"
           className="bg-primary hover:bg-primary-dark rounded-md px-5 py-2.5 text-white shadow-sm transition"
