@@ -9,13 +9,13 @@ import {
   useCallback,
 } from "react";
 
-interface User {
+export interface User {
   id: number;
   username: string;
   email: string;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   token: string | null;
   user: User | null;
   loading: boolean;

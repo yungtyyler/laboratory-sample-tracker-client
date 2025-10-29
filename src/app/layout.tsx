@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
+import NavBar from "@/components/NavBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("http://localhost:3000"),
   title: "LIMS - Laboratory Sample Tracker",
   description:
     "A full-stack LIMS-lite application for managing lab samples, built with Next.js and Django.",
@@ -34,9 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} mx-auto h-full w-full max-w-6xl bg-gray-100`}
-      >
+      <body className={`${inter.className} h-full w-full`}>
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
