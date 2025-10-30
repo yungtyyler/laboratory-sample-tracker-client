@@ -2,7 +2,6 @@ import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
 import PageSection from "@/components/layouts/PageSection";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 const FeaturesPage = () => {
   return (
