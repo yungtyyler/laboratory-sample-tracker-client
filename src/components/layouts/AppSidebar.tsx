@@ -3,9 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
-import { FiXSquare } from "react-icons/fi";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { PiX } from "react-icons/pi";
+import { PiX, PiPlus } from "react-icons/pi";
 
 const AppSidebar = ({
   isSidebarOpen,
@@ -18,7 +17,7 @@ const AppSidebar = ({
 
   const navLinks = [
     { name: "Dashboard", href: "/dashboard", icon: <LuLayoutDashboard /> },
-    { name: "Register Sample", href: "/dashboard/new", icon: <PiX /> },
+    { name: "Register Sample", href: "/dashboard/new", icon: <PiPlus /> },
     // Add more here as they are built:
     // { name: "Inventory", href: "/dashboard/inventory" }, // icon: <ClipboardList />
     // { name: "Settings", href: "/dashboard/settings" }, // icon: <Settings />
@@ -45,7 +44,7 @@ const AppSidebar = ({
             className="text-gray-500 md:hidden"
             aria-label="Close sidebar"
           >
-            <FiXSquare className="h-6 w-6" />
+            <PiX className="h-6 w-6" />
           </button>
         </div>
 
