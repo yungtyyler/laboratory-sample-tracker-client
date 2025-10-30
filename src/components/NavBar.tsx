@@ -8,10 +8,6 @@ import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
 function NavBar() {
   const { user, token, logout, loading } = useAuth();
 
-  if (loading) {
-    return;
-  }
-
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm">
       <MaxWidthContainer>
