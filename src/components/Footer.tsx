@@ -19,10 +19,10 @@ export default function Footer() {
             <Link href="/" className="text-sm hover:text-white">
               Home
             </Link>
-            <Link href="#" className="text-sm hover:text-white">
+            <Link href="/features" className="text-sm hover:text-white">
               Features
             </Link>
-            <Link href="#" className="text-sm hover:text-white">
+            <Link href="/about" className="text-sm hover:text-white">
               About
             </Link>
           </div>
