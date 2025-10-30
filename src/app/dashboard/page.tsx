@@ -6,6 +6,7 @@ import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { StatusPieChart } from "@/components/charts/StatusPieChart";
 import { ThroughputBarChart } from "@/components/charts/ThroughputBarChart";
+import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
 
 export interface Sample {
   id: number;
@@ -125,7 +126,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6 md:p-8">
+    <MaxWidthContainer className="min-h-screen bg-gray-100 p-6 md:p-8">
       <div className="mb-6 flex justify-between">
         <p className="text-lg font-bold text-gray-900 md:text-2xl">
           Welcome, {user?.username || "Scientist"}!
@@ -243,7 +244,7 @@ const Dashboard = () => {
           </tbody>
         </table>
       </div>
-    </div>
+    </MaxWidthContainer>
   );
 };
 

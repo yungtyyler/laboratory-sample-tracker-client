@@ -10,7 +10,7 @@ function NavBar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-gray-200 bg-white shadow-sm">
-      <MaxWidthContainer>
+      <MaxWidthContainer className="py-2">
         <div className="flex h-16 items-center justify-between">
           <Link
             href={`/`}

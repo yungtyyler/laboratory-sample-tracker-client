@@ -21,7 +21,9 @@ export default function SampleDetailPage() {
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
-    if (!token || !id) {
+    if (!id) {
+      setError("Sample ID not found in URL.");
+      setLoading(false);
       return;
     }
 
@@ -45,7 +47,10 @@ export default function SampleDetailPage() {
 
   const handleStatusUpdate = async (e: FormEvent) => {
     e.preventDefault();
-    if (!token || !sample) return;
+    if (!sample) {
+      setError("Sample data is not loaded yet.");
+      return;
+    }
 
     setIsUpdating(true);
     setError(null);

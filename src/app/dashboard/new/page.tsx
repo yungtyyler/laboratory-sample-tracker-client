@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
 
 const API_URL = "https://laboratory-sample-tracker-api.onrender.com";
 
@@ -21,6 +22,7 @@ const NewSample = () => {
       setError("You must be logged in to create a sample.");
       return;
     }
+
     setError(null);
     setIsLoading(true);
 
@@ -64,10 +66,10 @@ const NewSample = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <MaxWidthContainer className="flex min-h-screen items-center justify-center py-6 md:px-10">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-lg rounded-lg bg-white p-6 shadow-md md:p-8"
+        className="mx-auto w-full max-w-lg rounded-lg bg-white p-6 shadow-md md:p-8"
       >
         <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
           Register New Sample
@@ -129,7 +131,7 @@ const NewSample = () => {
           </Link>
         </div>
       </form>
-    </div>
+    </MaxWidthContainer>
   );
 };
 
