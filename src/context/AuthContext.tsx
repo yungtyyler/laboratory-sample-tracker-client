@@ -27,7 +27,7 @@ export interface AuthContextType {
 }
 
 const TOKEN_KEY = "authToken";
-const API_URL = "https://laboratory-sample-tracker-api.onrender.com";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 

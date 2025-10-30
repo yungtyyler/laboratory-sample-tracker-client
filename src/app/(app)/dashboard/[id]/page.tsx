@@ -6,7 +6,7 @@ import { useEffect, useState, FormEvent } from "react";
 import Link from "next/link";
 import { Sample } from "../page";
 
-const API_URL = "https://laboratory-sample-tracker-api.onrender.com";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const STATUS_CHOICES = ["Received", "Processing", "Analyzed", "Complete"];
 
 export default function SampleDetailPage() {

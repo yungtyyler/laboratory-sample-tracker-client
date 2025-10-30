@@ -4,8 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const API_URL = "https://laboratory-sample-tracker-api.onrender.com";
-// const API_URL = "http://127.0.0.1:8000"; // For local testing
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");

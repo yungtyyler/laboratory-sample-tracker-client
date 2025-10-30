@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
 
-const API_URL = "https://laboratory-sample-tracker-api.onrender.com";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const NewSample = () => {
   const [sampleId, setSampleId] = useState("");

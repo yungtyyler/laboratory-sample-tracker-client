@@ -20,7 +20,7 @@ export interface Sample {
   audit_logs: any[]; // type this better later
 }
 
-const API_URL = "https://laboratory-sample-tracker-api.onrender.com";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 async function fetchSamples(token: string): Promise<Sample[]> {
   return await fetch(`${API_URL}/api/samples`, {
