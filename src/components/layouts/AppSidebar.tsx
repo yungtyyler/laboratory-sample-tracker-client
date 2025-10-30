@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import { FiXSquare } from "react-icons/fi";
 import { LuLayoutDashboard } from "react-icons/lu";
-import { PiPlusSquare } from "react-icons/pi";
+import { PiX } from "react-icons/pi";
 
 const AppSidebar = ({
   isSidebarOpen,
@@ -18,7 +18,7 @@ const AppSidebar = ({
 
   const navLinks = [
     { name: "Dashboard", href: "/dashboard", icon: <LuLayoutDashboard /> },
-    { name: "Register Sample", href: "/dashboard/new", icon: <PiPlusSquare /> },
+    { name: "Register Sample", href: "/dashboard/new", icon: <PiX /> },
     // Add more here as they are built:
     // { name: "Inventory", href: "/dashboard/inventory" }, // icon: <ClipboardList />
     // { name: "Settings", href: "/dashboard/settings" }, // icon: <Settings />
