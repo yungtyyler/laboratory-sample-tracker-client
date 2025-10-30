@@ -119,7 +119,7 @@ const Dashboard = () => {
 
   if (authLoading || dataLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen">
         <p className="text-xl">Loading dashboard...</p>
       </div>
     );
@@ -127,20 +127,18 @@ const Dashboard = () => {
 
   return (
     <MaxWidthContainer className="min-h-screen bg-gray-100 p-6 md:p-8">
-      <div className="mb-6 flex justify-between">
-        <p className="text-lg font-bold text-gray-900 md:text-2xl">
-          Welcome, {user?.username || "Scientist"}!
-        </p>
+      <div className="mb-6 flex flex-col justify-between sm:flex-row">
+        <p className="text-xl font-bold text-gray-900 md:text-2xl">Dashboard</p>
         <Link
           href="/dashboard/new"
-          className="bg-primary hover:bg-primary-dark rounded-md px-5 py-2.5 text-white shadow-sm transition"
+          className="bg-primary hover:bg-primary-dark mt-4 w-fit rounded-md px-5 py-2.5 text-white shadow-sm transition sm:mt-0"
         >
           + Register New Sample
         </Link>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-6 md:grid-cols-3">
-        <div className="overflow-x-auto rounded-lg bg-white p-6 shadow md:col-span-2">
+      <div className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <div className="overflow-x-auto rounded-lg bg-white p-6 shadow xl:col-span-2">
           <h2 className="mb-4 text-xl font-semibold text-gray-800">
             Sample Throughput (Last 7 Days)
           </h2>
