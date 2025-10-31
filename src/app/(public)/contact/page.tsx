@@ -20,10 +20,10 @@ const ContactPage = () => {
           <p className="mt-8 text-center text-gray-600">
             Or email us directly at:{" "}
             <a
-              href="mailto:tyler.varzeas@gmail.com"
+              href="mailto:tvarzeas@limsly.com"
               className="text-primary hover:underline"
             >
-              tyler.varzeas@gmail.com
+              tvarzeas@limsly.com
             </a>
           </p>
         </div>

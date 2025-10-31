@@ -1,53 +1,37 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
+import { submitContactForm } from "@/app/actions";
+import type { ContactFormState } from "@/app/actions";
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className="bg-primary hover:bg-primary-dark w-full rounded-md px-4 py-2 text-white shadow-sm transition disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      {pending ? "Sending..." : "Send Message"}
+    </button>
+  );
+}
 
 const ContactForm = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
-  const [status, setStatus] = useState<
-    "idle" | "submitting" | "success" | "error"
-  >("idle");
-  const [feedback, setFeedback] = useState("");
+  const initialState: ContactFormState = { status: "idle", message: "" };
+  const [state, formAction] = useActionState(submitContactForm, initialState);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setStatus("submitting");
-    setFeedback("");
-
-    try {
-      // Send data to our new API route
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, subject, message }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Something went wrong.");
-      }
-
-      // Success!
-      setStatus("success");
-      setFeedback("Message sent successfully! We'll get back to you soon.");
-      setName("");
-      setEmail("");
-      setSubject("");
-      setMessage("");
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      setStatus("error");
-      setFeedback(error.message || "Something went wrong. Please try again.");
+  useEffect(() => {
+    if (state.status === "success") {
+      const form = document.getElementById("contact-form") as HTMLFormElement;
+      form?.reset();
+      console.log(state.message);
     }
-  };
+  }, [state]);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form id="contact-form" action={formAction} className="space-y-6">
       <div>
         <label
           htmlFor="name"
@@ -60,12 +44,9 @@ const ContactForm = () => {
           name="name"
           id="name"
           required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 bg-white p-2 shadow-sm"
         />
       </div>
-      {/* Email Input */}
       <div>
         <label
           htmlFor="email"
@@ -78,12 +59,9 @@ const ContactForm = () => {
           name="email"
           id="email"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 bg-white p-2 shadow-sm"
         />
       </div>
-      {/* Subject Input */}
       <div>
         <label
           htmlFor="subject"
@@ -96,12 +74,9 @@ const ContactForm = () => {
           name="subject"
           id="subject"
           required
-          value={subject}
-          onChange={(e) => setSubject(e.target.value)}
-          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 bg-white p-2 shadow-sm"
         />
       </div>
-      {/* Message Textarea */}
       <div>
         <label
           htmlFor="message"
@@ -114,28 +89,22 @@ const ContactForm = () => {
           name="message"
           rows={4}
           required
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 bg-white p-2 shadow-sm"
         />
       </div>
 
-      {feedback && (
+      {state.message && (
         <p
-          className={`text-sm ${status === "error" ? "text-red-600" : "text-green-600"}`}
+          className={`text-sm ${
+            state.status === "error" ? "text-red-600" : "text-green-600"
+          }`}
         >
-          {feedback}
+          {state.message}
         </p>
       )}
 
       <div>
-        <button
-          type="submit"
-          disabled={status === "submitting"}
-          className="bg-primary hover:bg-primary-dark w-full rounded-md px-4 py-2 text-white shadow-sm transition disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {status === "submitting" ? "Sending..." : "Send Message"}
-        </button>
+        <SubmitButton />
       </div>
     </form>
   );
