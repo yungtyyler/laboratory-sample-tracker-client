@@ -17,28 +17,32 @@ const ContactForm = () => {
     setStatus("submitting");
     setFeedback("");
 
-    // TODO: Replace this with actual form submission logic
-    // Option 1: Send to our own API endpoint
-    // Option 2: Use a service like Formspree, Netlify Forms, etc.
-    console.log("Submitting:", { name, email, subject, message });
-    // For now... simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    // --- End of placeholder ---
+    try {
+      // Send data to our new API route
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
 
-    // Success/error handling
-    const success = Math.random() > 0.2; // Simulate success/failure
-    if (success) {
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong.");
+      }
+
+      // Success!
       setStatus("success");
       setFeedback("Message sent successfully! We'll get back to you soon.");
       setName("");
       setEmail("");
       setSubject("");
       setMessage("");
-    } else {
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       setStatus("error");
-      setFeedback(
-        "Something went wrong. Please try again or email us directly."
-      );
+      setFeedback(error.message || "Something went wrong. Please try again.");
     }
   };
 
@@ -58,7 +62,7 @@ const ContactForm = () => {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 bg-white p-2 shadow-sm"
+          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
         />
       </div>
       {/* Email Input */}
@@ -76,7 +80,7 @@ const ContactForm = () => {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 bg-white p-2 shadow-sm"
+          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
         />
       </div>
       {/* Subject Input */}
@@ -94,7 +98,7 @@ const ContactForm = () => {
           required
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
-          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 bg-white p-2 shadow-sm"
+          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
         />
       </div>
       {/* Message Textarea */}
@@ -112,7 +116,7 @@ const ContactForm = () => {
           required
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 bg-white p-2 shadow-sm"
+          className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border-gray-300 shadow-sm"
         />
       </div>
 
@@ -128,7 +132,7 @@ const ContactForm = () => {
         <button
           type="submit"
           disabled={status === "submitting"}
-          className="bg-primary hover:bg-primary-dark w-full rounded-md px-4 py-2 text-white shadow-sm transition hover:cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+          className="bg-primary hover:bg-primary-dark w-full rounded-md px-4 py-2 text-white shadow-sm transition disabled:cursor-not-allowed disabled:opacity-50"
         >
           {status === "submitting" ? "Sending..." : "Send Message"}
         </button>
