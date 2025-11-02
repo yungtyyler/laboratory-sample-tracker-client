@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
@@ -7,23 +8,13 @@ import Link from "next/link";
 import { StatusPieChart } from "@/components/charts/StatusPieChart";
 import { ThroughputBarChart } from "@/components/charts/ThroughputBarChart";
 import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
-
-export interface Sample {
-  id: number;
-  sample_id: string;
-  name: string;
-  owner_username: string;
-  status: "Received" | "Processing" | "Analyzed" | "Complete";
-  created_at: string;
-  updated_at: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  audit_logs: any[]; // type this better later
-}
+import Spinner from "@/components/Spinner";
+import { Test, Sample } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 async function fetchSamples(token: string): Promise<Sample[]> {
-  return await fetch(`${API_URL}/api/samples`, {
+  return await fetch(`${API_URL}/api/samples/`, {
     headers: {
       Authorization: `Token ${token}`,
     },
@@ -36,7 +27,7 @@ async function fetchSamples(token: string): Promise<Sample[]> {
 }
 
 const Dashboard = () => {
-  const { token, user, loading: authLoading } = useAuth();
+  const { token, loading: authLoading } = useAuth();
   const router = useRouter();
   const [samples, setSamples] = useState<Sample[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
@@ -50,26 +41,21 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (authLoading) {
-      return;
+    // We only fetch data if auth is loaded AND we have a token
+    if (!authLoading && token) {
+      setDataLoading(true);
+      fetchSamples(token)
+        .then((data) => {
+          setSamples(data);
+        })
+        .catch((err) => {
+          setError(err.message);
+        })
+        .finally(() => {
+          setDataLoading(false);
+        });
     }
-
-    if (!token) {
-      router.push("/login");
-      return;
-    }
-
-    fetchSamples(token)
-      .then((data) => {
-        setSamples(data);
-      })
-      .catch((err) => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setDataLoading(false);
-      });
-  }, [token, router, authLoading]);
+  }, [token, authLoading]);
 
   // We use 'useMemo' so this only recalculates when 'samples' changes
   const statusChartData = useMemo(() => {
@@ -117,10 +103,11 @@ const Dashboard = () => {
     }));
   }, [samples]);
 
-  if (authLoading || dataLoading) {
+  if (dataLoading) {
     return (
-      <div className="flex min-h-screen">
-        <p className="text-xl">Loading dashboard...</p>
+      <div className="flex min-h-full items-center justify-center">
+        <Spinner />
+        <p className="ml-3 text-xl">Loading dashboard...</p>
       </div>
     );
   }
@@ -137,110 +124,124 @@ const Dashboard = () => {
         </Link>
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-6 xl:grid-cols-3">
-        <div className="overflow-x-auto rounded-lg bg-white p-6 shadow xl:col-span-2">
-          <h2 className="mb-4 text-xl font-semibold text-gray-800">
-            Sample Throughput (Last 7 Days)
-          </h2>
-          {samples.length > 0 ? (
-            <ThroughputBarChart data={throughputChartData} />
-          ) : (
-            <p className="text-gray-500">No sample data to display.</p>
-          )}
-        </div>
-        <div className="overflow-x-auto rounded-lg bg-white p-6 shadow">
-          <h2 className="mb-4 text-xl font-semibold text-gray-800">
-            Status Breakdown
-          </h2>
-          {statusChartData.length > 0 ? (
-            <StatusPieChart data={statusChartData} />
-          ) : (
-            <p className="text-gray-500">No sample data to display.</p>
-          )}
-        </div>
-      </div>
-
-      {error && (
-        <p className="mb-4 rounded bg-red-100 p-3 text-center text-sm text-red-700">
-          {error}
-        </p>
-      )}
-
-      <div className="overflow-x-auto rounded-lg bg-white shadow">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-              >
-                Sample ID
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-              >
-                Name
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-              >
-                Status
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
-              >
-                Last Updated
-              </th>
-              <th scope="col" className="relative px-6 py-3">
-                <span className="sr-only">Edit</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 bg-white">
+      <div className="space-y-8">
+        {/* Charts Section */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          <div className="overflow-x-auto rounded-lg bg-white p-6 shadow md:col-span-2">
+            <h2 className="mb-4 text-xl font-semibold text-gray-800">
+              Sample Throughput (Last 7 Days)
+            </h2>
             {samples.length > 0 ? (
-              samples.map((sample) => (
-                <tr key={sample.id}>
-                  <td className="px-6 py-4 text-sm font-medium whitespace-nowrap text-gray-900">
-                    {sample.sample_id}
-                  </td>
-                  <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                    {sample.name}
-                  </td>
-                  <td className="px-6 py-4 text-sm whitespace-nowrap">
-                    <span
-                      className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${statusColors[sample.status] || "bg-gray-100 text-gray-800"} `}
-                    >
-                      {sample.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                    {new Date(sample.updated_at).toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
-                    <Link
-                      href={`/dashboard/${sample.id}`}
-                      className="text-primary hover:text-primary-dark"
-                    >
-                      View/Edit
-                    </Link>
+              <ThroughputBarChart data={throughputChartData} />
+            ) : (
+              <p className="text-gray-500">No sample data to display.</p>
+            )}
+          </div>
+          <div className="overflow-x-auto rounded-lg bg-white p-6 shadow">
+            <h2 className="mb-4 text-xl font-semibold text-gray-800">
+              Status Breakdown
+            </h2>
+            {statusChartData.length > 0 ? (
+              <StatusPieChart data={statusChartData} />
+            ) : (
+              <p className="text-gray-500">No sample data to display.</p>
+            )}
+          </div>
+        </div>
+
+        {error && (
+          <p className="mb-4 rounded bg-red-100 p-3 text-center text-sm text-red-700">
+            {error}
+          </p>
+        )}
+
+        {/* Samples Table */}
+        <div className="overflow-x-auto rounded-lg bg-white shadow">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                >
+                  Sample ID
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                >
+                  Name
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                >
+                  Status
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                >
+                  Tests
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
+                >
+                  Last Updated
+                </th>
+                <th scope="col" className="relative px-6 py-3">
+                  <span className="sr-only">Edit</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-white">
+              {samples.length > 0 ? (
+                samples.map((sample) => (
+                  <tr key={sample.id}>
+                    <td className="px-6 py-4 text-sm font-medium whitespace-nowrap text-gray-900">
+                      {sample.sample_id}
+                    </td>
+                    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
+                      {sample.name}
+                    </td>
+                    <td className="px-6 py-4 text-sm whitespace-nowrap">
+                      <span
+                        className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${statusColors[sample.status] || "bg-gray-100 text-gray-800"} `}
+                      >
+                        {sample.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
+                      {sample.tests.length}
+                    </td>
+                    <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
+                      {new Date(sample.updated_at).toLocaleString()}
+                    </td>
+                    <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
+                      <Link
+                        href={`/dashboard/${sample.id}`}
+                        className="text-primary hover:text-primary-dark"
+                      >
+                        View/Edit
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-6 py-4 text-center text-sm text-gray-500"
+                  >
+                    No samples found. Click &quot;Register New Sample&quot; to
+                    begin.
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan={5}
-                  className="px-6 py-4 text-center text-sm text-gray-500"
-                >
-                  No samples found.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </MaxWidthContainer>
   );
