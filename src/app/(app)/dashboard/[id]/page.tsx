@@ -91,7 +91,7 @@ export default function SampleDetailPage() {
 
   const handleAddTask = async (e: FormEvent) => {
     e.preventDefault();
-    if (!sample || !newTaskName.trim()) return;
+    if (!sample || !newTaskName.trim() || !user) return;
 
     setIsAddingTask(true);
     setError(null);
@@ -108,11 +108,12 @@ export default function SampleDetailPage() {
           body: JSON.stringify({
             name: newTaskName,
             status: "Pending",
-            due_date: newTaskDueDate,
-            analyst_username: user?.username,
+            due_date: newTaskDueDate || null,
+            analyst: user.id,
           }),
         }
       );
+      console.log(newTaskDueDate);
 
       if (!response.ok) {
         const err = await response.json();
