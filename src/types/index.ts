@@ -5,18 +5,26 @@ export enum SampleStatus {
   Complete = "Complete",
 }
 
-export enum TestStatus {
+export enum TaskStatus {
   Pending = "Pending",
   InProgress = "In Progress",
   InReview = "In Review",
   Completed = "Completed",
 }
 
-export interface Test {
+export enum PriorityChoices {
+  High = "High",
+  Medium = "Medium",
+  Low = "Low",
+}
+
+export interface Task {
   id: number;
   name: string;
-  status: TestStatus;
-  analyst_username: string | null;
+  status: TaskStatus;
+  priority: PriorityChoices;
+  due_date: string;
+  analyst_id: number | null;
   result_text: string | null;
   result_numeric: number | null;
   created_at: string;
@@ -39,5 +47,5 @@ export interface Sample {
   created_at: string;
   updated_at: string;
   audit_logs: AuditLog[];
-  tests: Test[];
+  tasks: Task[];
 }

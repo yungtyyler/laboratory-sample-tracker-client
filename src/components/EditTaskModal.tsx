@@ -3,17 +3,17 @@
 
 import { useState, useEffect, FormEvent } from "react";
 import { useAuth } from "@/context/AuthContext"; // Use @/ alias
-import { Test } from "@/types"; // Use @/ alias
+import { Task } from "@/types"; // Use @/ alias
 import Spinner from "@/components/Spinner"; // Use @/ alias
 
-interface EditTestModalProps {
-  test: Test | null;
+interface EditTaskModalProps {
+  task: Task | null;
   onClose: () => void;
-  onSave: (updatedTest: Test) => void;
-  sampleId: number; // We need this to know which sample the test belongs to
+  onSave: (updatedTask: Task) => void;
+  sampleId: number; // We need this to know which sample the task belongs to
 }
 
-const TEST_STATUS_CHOICES = [
+const TASK_STATUS_CHOICES = [
   "Pending",
   "In Progress",
   "In Review",
@@ -22,12 +22,12 @@ const TEST_STATUS_CHOICES = [
 // Make sure NEXT_PUBLIC_API_URL is set in your .env.local
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-const EditTestModal = ({
-  test,
+const EditTaskModal = ({
+  task,
   onClose,
   onSave,
   sampleId,
-}: EditTestModalProps) => {
+}: EditTaskModalProps) => {
   const { token } = useAuth();
 
   // Initialize state as empty/default, NOT derived from props.
@@ -37,17 +37,17 @@ const EditTestModal = ({
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Use the effect ONLY to populate the form when the `test` prop changes.
+  // Use the effect ONLY to populate the form when the `task` prop changes.
   useEffect(() => {
-    if (test) {
-      setStatus(test.status);
-      setResultText(test.result_text || "");
-      setResultNumeric(test.result_numeric?.toString() || "");
+    if (task) {
+      setStatus(task.status);
+      setResultText(task.result_text || "");
+      setResultNumeric(task.result_numeric?.toString() || "");
       setError(null);
     }
-  }, [test]); // This effect now correctly derives state from props
+  }, [task]); // This effect now correctly derives state from props
 
-  if (!test) return null; // The modal is hidden if no test is selected
+  if (!task) return null; // The modal is hidden if no task is selected
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -57,7 +57,7 @@ const EditTestModal = ({
     setError(null);
 
     const payload = {
-      name: test.name, // Name is not editable in this modal, but required by API
+      name: task.name, // Name is not editable in this modal, but required by API
       status: status,
       result_text: resultText || null,
       result_numeric: resultNumeric ? parseFloat(resultNumeric) : null,
@@ -65,7 +65,7 @@ const EditTestModal = ({
 
     try {
       const response = await fetch(
-        `${API_URL}/api/samples/${sampleId}/tests/${test.id}/`,
+        `${API_URL}/api/samples/${sampleId}/tasks/${task.id}/`,
         {
           method: "PUT",
           headers: {
@@ -79,12 +79,12 @@ const EditTestModal = ({
       if (!response.ok) {
         const err = await response.json();
         throw new Error(
-          err.detail || "Failed to update test. Check all fields."
+          err.detail || "Failed to update task. Check all fields."
         );
       }
 
-      const updatedTest = await response.json();
-      onSave(updatedTest); // Pass data back to parent
+      const updatedTask = await response.json();
+      onSave(updatedTask); // Pass data back to parent
       onClose(); // Close modal
     } catch (err: any) {
       setError(err.message);
@@ -106,25 +106,25 @@ const EditTestModal = ({
       >
         <form onSubmit={handleSubmit} className="space-y-4">
           <h2 className="text-xl font-semibold text-gray-900">
-            Edit Test: {test.name}
+            Edit Task: {task.name}
           </h2>
           <hr />
 
-          {/* Test Status */}
+          {/* Task Status */}
           <div>
             <label
-              htmlFor="test-status"
+              htmlFor="task-status"
               className="block text-sm font-medium text-gray-700"
             >
-              Test Status
+              Task Status
             </label>
             <select
-              id="test-status"
+              id="task-status"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               className="focus:border-primary focus:ring-primary mt-1 block w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm"
             >
-              {TEST_STATUS_CHOICES.map((choice) => (
+              {TASK_STATUS_CHOICES.map((choice) => (
                 <option key={choice} value={choice}>
                   {choice}
                 </option>
@@ -197,4 +197,4 @@ const EditTestModal = ({
   );
 };
 
-export default EditTestModal;
+export default EditTaskModal;

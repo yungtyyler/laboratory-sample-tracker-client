@@ -2,14 +2,13 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
 import { useEffect, useState, useMemo } from "react";
 import Link from "next/link";
 import { StatusPieChart } from "@/components/charts/StatusPieChart";
 import { ThroughputBarChart } from "@/components/charts/ThroughputBarChart";
 import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
 import Spinner from "@/components/Spinner";
-import { Test, Sample } from "@/types";
+import { Sample } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -28,7 +27,6 @@ async function fetchSamples(token: string): Promise<Sample[]> {
 
 const Dashboard = () => {
   const { token, loading: authLoading } = useAuth();
-  const router = useRouter();
   const [samples, setSamples] = useState<Sample[]>([]);
   const [dataLoading, setDataLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -182,7 +180,7 @@ const Dashboard = () => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase"
                 >
-                  Tests
+                  Tasks
                 </th>
                 <th
                   scope="col"
@@ -213,7 +211,7 @@ const Dashboard = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                      {sample.tests.length}
+                      {sample.tasks.length}
                     </td>
                     <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
                       {new Date(sample.updated_at).toLocaleString()}

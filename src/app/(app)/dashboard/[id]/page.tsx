@@ -4,15 +4,15 @@
 import { useAuth } from "@/context/AuthContext";
 import { useParams } from "next/navigation";
 import { useEffect, useState, FormEvent } from "react";
-import { Sample, Test } from "@/types";
-import EditTestModal from "@/components/EditTestModal";
+import { Sample, Task } from "@/types";
+import EditTaskModal from "@/components/EditTaskModal";
 import Spinner from "@/components/Spinner";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 const STATUS_CHOICES = ["Received", "Processing", "Analyzed", "Complete"];
 
 export default function SampleDetailPage() {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const params = useParams();
   const { id } = params;
 
@@ -22,9 +22,10 @@ export default function SampleDetailPage() {
   const [currentStatus, setCurrentStatus] = useState<string>("");
   const [isUpdating, setIsUpdating] = useState(false);
 
-  const [newTestName, setNewTestName] = useState("");
-  const [isAddingTest, setIsAddingTest] = useState(false);
-  const [editingTest, setEditingTest] = useState<Test | null>(null);
+  const [newTaskName, setNewTaskName] = useState("");
+  const [newTaskDueDate, setNewTaskDueDate] = useState("");
+  const [isAddingTask, setIsAddingTask] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
 
   const fetchSampleData = async () => {
     if (!id || !token) return;
@@ -88,16 +89,16 @@ export default function SampleDetailPage() {
     }
   };
 
-  const handleAddTest = async (e: FormEvent) => {
+  const handleAddTask = async (e: FormEvent) => {
     e.preventDefault();
-    if (!sample || !newTestName.trim()) return;
+    if (!sample || !newTaskName.trim()) return;
 
-    setIsAddingTest(true);
+    setIsAddingTask(true);
     setError(null);
 
     try {
       const response = await fetch(
-        `${API_URL}/api/samples/${sample.id}/tests/`,
+        `${API_URL}/api/samples/${sample.id}/tasks/`,
         {
           method: "POST",
           headers: {
@@ -105,36 +106,38 @@ export default function SampleDetailPage() {
             Authorization: `Token ${token}`,
           },
           body: JSON.stringify({
-            name: newTestName,
+            name: newTaskName,
             status: "Pending",
+            due_date: newTaskDueDate,
+            analyst_username: user?.username,
           }),
         }
       );
 
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.name?.[0] || err.detail || "Failed to add test");
+        throw new Error(err.name?.[0] || err.detail || "Failed to add task");
       }
 
-      setNewTestName("");
+      setNewTaskName("");
       await fetchSampleData();
     } catch (err: any) {
       setError(err.message);
     } finally {
-      setIsAddingTest(false);
+      setIsAddingTask(false);
     }
   };
 
-  const handleTestUpdate = (updatedTest: Test) => {
+  const handleTaskUpdate = (updatedTask: Task) => {
     if (!sample) return;
 
-    const updatedTests = sample.tests.map((t) =>
-      t.id === updatedTest.id ? updatedTest : t
+    const updatedTasks = sample.tasks.map((t) =>
+      t.id === updatedTask.id ? updatedTask : t
     );
 
     setSample({
       ...sample,
-      tests: updatedTests,
+      tasks: updatedTasks,
     });
   };
 
@@ -152,8 +155,8 @@ export default function SampleDetailPage() {
     return <div className="p-8 text-center">Sample not found.</div>;
   }
 
-  // Define status colors for tests
-  const testStatusColors: { [key: string]: string } = {
+  // Define status colors for tasks
+  const taskStatusColors: { [key: string]: string } = {
     Pending: "bg-gray-200 text-gray-800",
     "In Progress": "bg-blue-200 text-blue-800",
     "In Review": "bg-yellow-200 text-yellow-800",
@@ -243,35 +246,51 @@ export default function SampleDetailPage() {
         </div>
       </div>
 
-      {/* --- SECTION: TEST MANAGEMENT --- */}
+      {/* --- SECTION: TASK MANAGEMENT --- */}
       <div className="rounded-lg bg-white p-6 shadow">
-        <h2 className="mb-4 text-xl font-semibold">Test Management</h2>
+        <h2 className="mb-4 text-xl font-semibold">Task Management</h2>
         <form
-          onSubmit={handleAddTest}
+          onSubmit={handleAddTask}
           className="mb-6 flex items-end space-x-4"
         >
           <div className="grow">
             <label
-              htmlFor="testName"
+              htmlFor="taskName"
               className="mb-2 block text-sm font-medium text-gray-700"
             >
-              New Test Name
+              New Task Name
             </label>
             <input
-              id="testName"
+              id="taskName"
               type="text"
-              value={newTestName}
-              onChange={(e) => setNewTestName(e.target.value)}
+              value={newTaskName}
+              onChange={(e) => setNewTaskName(e.target.value)}
+              placeholder="e.g., 'HPLC Potency', 'Water Content'"
+              className="focus:border-primary focus:ring-primary w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm"
+            />
+          </div>
+          <div className="grow">
+            <label
+              htmlFor="taskDueDate"
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
+              New Task Name
+            </label>
+            <input
+              id="taskDueDate"
+              type="date"
+              value={newTaskDueDate}
+              onChange={(e) => setNewTaskDueDate(e.target.value)}
               placeholder="e.g., 'HPLC Potency', 'Water Content'"
               className="focus:border-primary focus:ring-primary w-full rounded-md border border-gray-300 p-3 text-gray-900 shadow-sm"
             />
           </div>
           <button
             type="submit"
-            disabled={isAddingTest || !newTestName.trim()}
+            disabled={isAddingTask || !newTaskName.trim()}
             className="bg-primary hover:not-disabled:bg-primary-dark h-[46px] rounded-md px-5 py-3 text-white shadow-sm transition hover:not-disabled:cursor-pointer disabled:opacity-50"
           >
-            {isAddingTest ? <Spinner /> : "Add Test"}
+            {isAddingTask ? <Spinner /> : "Add Task"}
           </button>
         </form>
 
@@ -280,7 +299,7 @@ export default function SampleDetailPage() {
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-                  Test Name
+                  Task Name
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
                   Status
@@ -292,7 +311,7 @@ export default function SampleDetailPage() {
                   Analyst
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">
-                  Last Updated
+                  Due Date
                 </th>
                 <th className="relative px-6 py-3">
                   <span className="sr-only">Actions</span>
@@ -300,33 +319,33 @@ export default function SampleDetailPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-white">
-              {sample.tests.length > 0 ? (
-                sample.tests.map((test) => (
-                  <tr key={test.id}>
+              {sample.tasks.length > 0 ? (
+                sample.tasks.map((task) => (
+                  <tr key={task.id}>
                     <td className="px-6 py-4 text-sm font-medium whitespace-nowrap text-gray-900">
-                      {test.name}
+                      {task.name}
                     </td>
                     <td className="px-6 py-4 text-sm whitespace-nowrap">
                       <span
-                        className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${testStatusColors[test.status] || "bg-gray-100 text-gray-800"}`}
+                        className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${taskStatusColors[task.status] || "bg-gray-100 text-gray-800"}`}
                       >
-                        {test.status}
+                        {task.status}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                      {test.result_numeric !== null
-                        ? test.result_numeric
-                        : test.result_text || "N/A"}
+                      {task.result_numeric !== null
+                        ? task.result_numeric
+                        : task.result_text || "N/A"}
                     </td>
                     <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                      {test.analyst_username || "Unassigned"}
+                      {sample.owner_username}
                     </td>
                     <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-500">
-                      {new Date(test.updated_at).toLocaleString()}
+                      {new Date(task.due_date).toLocaleString()}
                     </td>
                     <td className="px-6 py-4 text-right text-sm font-medium whitespace-nowrap">
                       <button
-                        onClick={() => setEditingTest(test)}
+                        onClick={() => setEditingTask(task)}
                         className="text-primary hover:text-primary-dark cursor-pointer"
                       >
                         Edit
@@ -340,7 +359,7 @@ export default function SampleDetailPage() {
                     colSpan={6}
                     className="px-6 py-4 text-center text-sm text-gray-500"
                   >
-                    No tests have been added to this sample.
+                    No tasks have been added to this sample.
                   </td>
                 </tr>
               )}
@@ -349,12 +368,12 @@ export default function SampleDetailPage() {
         </div>
       </div>
 
-      {editingTest && (
-        <EditTestModal
-          test={editingTest}
+      {editingTask && (
+        <EditTaskModal
+          task={editingTask}
           sampleId={sample.id}
-          onClose={() => setEditingTest(null)}
-          onSave={handleTestUpdate}
+          onClose={() => setEditingTask(null)}
+          onSave={handleTaskUpdate}
         />
       )}
     </div>
