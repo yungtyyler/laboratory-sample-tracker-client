@@ -1,6 +1,17 @@
 import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
 import PageSection from "@/components/layouts/PageSection";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Pricing",
+  alternates: {
+    canonical: "/pricing",
+  },
+  openGraph: {
+    title: "Pricing",
+  },
+};
 
 const PricingPage = () => {
   return (

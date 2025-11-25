@@ -4,14 +4,24 @@ import "@/app/globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
+const BASE_ADDRESS = process.env.NEXT_PUBLIC_BASE_ADDRESS!;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("http://localhost:3000"),
-  title: "LIMS - Laboratory Sample Tracker",
+  metadataBase: new URL(BASE_ADDRESS),
+  title: {
+    default: "LIMSly - Laboratory Sample Tracker",
+    template: "LIMSly | %s",
+  },
   description:
     "A full-stack LIMS-lite application for managing lab samples, built with Next.js and Django.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "LIMS - Laboratory Sample Tracker",
+    title: {
+      default: "LIMSly - Laboratory Sample Tracker",
+      template: "LIMSly | %s",
+    },
     description: "A full-stack LIMS-lite application for managing lab samples.",
     images: [
       {

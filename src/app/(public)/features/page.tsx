@@ -2,6 +2,17 @@ import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
 import PageSection from "@/components/layouts/PageSection";
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Features",
+  alternates: {
+    canonical: "/features",
+  },
+  openGraph: {
+    title: "Features",
+  },
+};
 
 const FeaturesPage = () => {
   return (

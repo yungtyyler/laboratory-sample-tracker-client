@@ -4,6 +4,17 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Login",
+  alternates: {
+    canonical: "/login",
+  },
+  openGraph: {
+    title: "Login",
+  },
+};
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

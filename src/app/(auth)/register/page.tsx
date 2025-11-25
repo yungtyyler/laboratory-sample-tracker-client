@@ -3,6 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Register",
+  alternates: {
+    canonical: "/register",
+  },
+  openGraph: {
+    title: "Register",
+  },
+};
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 

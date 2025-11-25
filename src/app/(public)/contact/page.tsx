@@ -1,6 +1,17 @@
 import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
 import PageSection from "@/components/layouts/PageSection";
 import ContactForm from "@/components/ContactForm";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact",
+  alternates: {
+    canonical: "/contact",
+  },
+  openGraph: {
+    title: "Contact",
+  },
+};
 
 const ContactPage = () => {
   return (

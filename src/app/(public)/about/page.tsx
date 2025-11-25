@@ -2,6 +2,17 @@ import MaxWidthContainer from "@/components/layouts/MaxWidthContainer";
 import PageSection from "@/components/layouts/PageSection";
 import Image from "next/image";
 import Link from "next/link";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "About Us",
+  },
+};
 
 export default function AboutPage() {
   return (
@@ -18,6 +29,7 @@ export default function AboutPage() {
           alt="Tyler Varzeas"
           width={300}
           height={300}
+          priority
           className="mx-auto aspect-square rounded-full object-cover object-bottom"
         />
 
